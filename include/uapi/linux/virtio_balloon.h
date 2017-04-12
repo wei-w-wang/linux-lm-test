@@ -34,6 +34,7 @@
 #define VIRTIO_BALLOON_F_MUST_TELL_HOST	0 /* Tell before reclaiming pages */
 #define VIRTIO_BALLOON_F_STATS_VQ	1 /* Memory Stats virtqueue */
 #define VIRTIO_BALLOON_F_DEFLATE_ON_OOM	2 /* Deflate balloon on OOM */
+#define VIRTIO_BALLOON_F_BALLOON_CHUNKS 3 /* Inflate/Deflate pages in chunks */
 
 /* Size of a PFN in the balloon interface. */
 #define VIRTIO_BALLOON_PFN_SHIFT 12
@@ -81,5 +82,17 @@ struct virtio_balloon_stat {
 	__virtio16 tag;
 	__virtio64 val;
 } __attribute__((packed));
+
+struct virtio_balloon_page_chunk_hdr {
+	/* Number of chunks in the payload */
+	__le32 chunks;
+};
+
+#define VIRTIO_BALLOON_CHUNK_BASE_SHIFT 12
+#define VIRTIO_BALLOON_CHUNK_SIZE_SHIFT 12
+struct virtio_balloon_page_chunk {
+	__le64 base;
+	__le64 size;
+};
 
 #endif /* _LINUX_VIRTIO_BALLOON_H */
